@@ -1,0 +1,582 @@
+/* ==========================================================
+   styles.css — Cuatro parques y una familia
+   ========================================================== */
+
+
+/* ---------- Variables ----------
+   --acento cambia según el parque. Basta con poner
+   data-park="mk" (o ep, ak, hs) en un elemento para que él
+   y todo lo que contiene usen los colores de ese parque. */
+
+:root {
+  --papel: #f5f0e6;
+  --papel-oscuro: #ebe3d3;
+  --blanco: #fffdf8;
+  --tinta: #2a2622;
+  --tinta-suave: #6b625a;
+  --linea: #d8cdb8;
+
+  --acento: #7a5c3a;          /* color por defecto: sepia */
+  --acento-claro: #efe4d2;
+  --detalle: #7a5c3a;         /* segundo color de cada parque */
+
+  /* Cabecera: en la portada es "papel"; en cada parque se pinta (ver más abajo) */
+  --cabecera-fondo: transparent;
+  --cabecera-texto: var(--tinta);
+  --cabecera-suave: var(--tinta-suave);
+  --patron: none;             /* dibujo de fondo hecho con degradados */
+  --patron-tamano: auto;
+
+  --fuente-titulos: 'Fraunces', Georgia, serif;
+  --fuente-texto: 'Source Serif 4', Georgia, serif;
+  --fuente-etiquetas: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --ancho-texto: 44rem;
+  --ancho-max: 70rem;
+}
+
+/* Magic Kingdom: azul */
+[data-park="mk"] {
+  --acento: #2e3f8f;
+  --acento-claro: #e4e6f4;
+  --detalle: #e2b740;
+  --patron: radial-gradient(rgba(226, 183, 64, 0.45) 1.5px, transparent 2px);
+  --patron-tamano: 22px 22px;
+}
+
+/* Epcot: turquesa  */
+[data-park="ep"] {
+  --acento: #0f6f7c;
+  --acento-claro: #dcecee;
+  --detalle: #c9dfe2;
+  --patron: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  --patron-tamano: 26px 26px;
+}
+
+/* Animal Kingdom: verde  */
+[data-park="ak"] {
+  --acento: #55692a;
+  --acento-claro: #e7ebd8;
+  --detalle: #d39a52;
+  --patron: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 0 12px, transparent 12px 24px);
+}
+
+/* Hollywood Studios: rojo  */
+[data-park="hs"] {
+  --acento: #a12a22;
+  --acento-claro: #f3e0dc;
+  --detalle: #f1d9a6;
+  --patron: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.16) 0 4px, transparent 4px 20px);
+}
+
+/* En las páginas de un parque, la cabecera se pinta con su color */
+body:not([data-park="inicio"]) {
+  --cabecera-fondo: var(--acento);
+  --cabecera-texto: #fffdf8;
+  --cabecera-suave: rgba(255, 253, 248, 0.75);
+}
+
+
+/* ---------- Base ---------- */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* el papel se tiñe un poco del color del parque */
+  background: color-mix(in srgb, var(--acento) 6%, var(--papel));
+  color: var(--tinta);
+  transition: background-color 0.4s;
+  font-family: var(--fuente-texto);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2 {
+  font-family: var(--fuente-titulos);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+a { color: var(--acento); }
+
+code, kbd {
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.85em;
+  background: var(--papel-oscuro);
+  padding: 0.1em 0.35em;
+}
+
+pre {
+  background: var(--papel-oscuro);
+  border-left: 3px solid var(--acento);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+pre code { background: none; padding: 0; }
+
+
+/* ---------- Cabecera ---------- */
+
+.cabecera {
+  border-top: 8px solid var(--detalle);
+  border-bottom: 1px solid var(--linea);
+  padding: 2rem 1rem 0;
+  color: var(--cabecera-texto);
+  background-color: var(--cabecera-fondo);
+  background-image: var(--patron);
+  background-size: var(--patron-tamano);
+  transition: background-color 0.4s, border-color 0.4s;
+}
+
+.cabecera__fila,
+.lema,
+.menu ul {
+  max-width: var(--ancho-max);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cabecera__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.marca {
+  font-family: var(--fuente-titulos);
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+  text-decoration: none;
+}
+
+.reloj {
+  margin: 0;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cabecera-suave);
+  border: 1px dashed currentColor;
+  padding: 0.4rem 0.75rem;
+}
+
+.reloj time {
+  color: var(--cabecera-texto);
+  font-weight: 500;
+  margin-left: 0.35rem;
+}
+
+.lema {
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: var(--cabecera-suave);
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+}
+
+.menu a {
+  display: block;
+  padding: 0.6rem 0;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cabecera-suave);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.menu a:hover { color: var(--cabecera-texto); }
+
+/* El enlace de la página actual (lo marca index.js con aria-current) */
+.menu a[aria-current="page"] {
+  color: var(--cabecera-texto);
+  border-bottom-color: var(--detalle);
+}
+
+
+/* ---------- Elementos comunes ---------- */
+
+main {
+  max-width: calc(var(--ancho-max) + 2rem);   /* + el padding lateral */
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+/* Etiqueta tipo sello de pasaporte */
+.sello {
+  display: inline-block;
+  margin: 0;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--acento);
+  border: 2px solid var(--acento);
+  padding: 0.2rem 0.6rem;
+  transform: rotate(-2deg);
+}
+
+.ayuda {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--tinta-suave);
+}
+
+
+/* ---------- Portada ---------- */
+
+.intro {
+  max-width: var(--ancho-texto);
+  margin-bottom: 3rem;
+}
+
+.intro h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin-top: 0;
+}
+
+/* Las tarjetas se colocan con Grid: tantas columnas como quepan */
+.tarjetas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
+  gap: 3rem 2.5rem;
+}
+
+/* Cada tarjeta parece una foto pegada en el cuaderno, un poco torcida */
+.tarjeta {
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  padding: 0.75rem 0.75rem 1.25rem;
+  transform: rotate(-0.8deg);
+  transition: transform 0.25s;
+}
+
+.tarjeta:nth-child(even) { transform: rotate(0.8deg); }
+
+.tarjeta:hover { transform: rotate(0) translateY(-4px); }
+
+.tarjeta a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.tarjeta img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.tarjeta h2 {
+  font-size: 1.3rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.tarjeta p { margin: 0; font-size: 1rem; }
+
+.tarjeta:hover h2 { color: var(--acento); }
+
+.tarjeta .tarjeta__progreso {
+  margin-top: 1rem;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.75rem;
+  color: var(--tinta-suave);
+}
+
+
+/* ---------- Entrada ---------- */
+
+.entrada {
+  max-width: var(--ancho-texto);
+  margin: 0 auto;
+  counter-reset: seccion;     /* contador para numerar las secciones */
+}
+
+.volver {
+  display: table;
+  margin-bottom: 1.5rem;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.entrada h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 1rem 0 0.5rem;
+}
+
+.entrada__entradilla {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--tinta-suave);
+}
+
+.entrada__fecha {
+  margin: 0;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.entrada__portada {
+  margin: 2rem 0 0;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  padding: 0.75rem;
+}
+
+/* Cada <h2> de la entrada lleva delante su número: 01, 02, 03... */
+.entrada section h2 {
+  font-size: 1.6rem;
+  margin: 3rem 0 1rem;
+}
+
+.entrada section h2::before {
+  counter-increment: seccion;
+  content: counter(seccion, decimal-leading-zero);
+  display: block;
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--acento);
+  margin-bottom: 0.25rem;
+}
+
+/* Datos del parque, como el resguardo de una entrada */
+.datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+  margin: 0;
+  padding: 1.25rem 0;
+  border-top: 1px dashed var(--tinta-suave);
+  border-bottom: 1px dashed var(--tinta-suave);
+}
+
+.datos dt {
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tinta-suave);
+}
+
+.datos dd { margin: 0; }
+
+/* Galería: cuadrícula de miniaturas */
+.galeria {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.75rem;
+}
+
+.galeria__foto {
+  display: block;
+  width: 100%;
+  padding: 0.35rem;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  cursor: zoom-in;
+}
+
+.galeria__foto img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.galeria__foto:hover,
+.galeria__foto:focus-visible {
+  border-color: var(--acento);
+  outline: 2px solid var(--acento);
+}
+
+/* Lista de imprescindibles */
+.lista-imprescindibles {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-imprescindibles li { border-bottom: 1px solid var(--linea); }
+
+.lista-imprescindibles label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  cursor: pointer;
+}
+
+.lista-imprescindibles input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--acento);
+  flex-shrink: 0;
+}
+
+/* :has() permite dar estilo al label según si su casilla está marcada */
+.lista-imprescindibles label:has(input:checked) {
+  color: var(--tinta-suave);
+  text-decoration: line-through;
+  text-decoration-color: var(--acento);
+}
+
+.progreso {
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.8rem;
+  color: var(--acento);
+}
+
+/* Consejo: una nota destacada */
+.consejo {
+  margin-top: 3rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--acento-claro);
+  border-left: 5px solid var(--acento);
+}
+
+.consejo h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.consejo p { margin: 0; }
+
+/* Enlaces a la entrada anterior y siguiente */
+.entrada__pasos {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--linea);
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.85rem;
+}
+
+.entrada__pasos a { text-decoration: none; }
+.entrada__pasos a:hover { text-decoration: underline; }
+
+/* Página "Cómo está hecho" */
+.documento li { margin-bottom: 0.75rem; }
+
+
+/* ---------- Visor de fotos (<dialog>) ---------- */
+
+.visor {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: 94vw;
+  max-height: 94vh;
+  overflow: visible;
+}
+
+/* ::backdrop es el fondo que cubre la página cuando el diálogo está abierto */
+.visor::backdrop { background: rgba(20, 17, 14, 0.88); }
+
+.visor figure { margin: 0; }
+
+.visor img {
+  max-width: 94vw;
+  max-height: 82vh;
+  margin: 0 auto;
+  border: 6px solid var(--blanco);
+}
+
+.visor figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  color: var(--papel);
+  font-style: italic;
+}
+
+.visor__contador {
+  font-family: var(--fuente-etiquetas);
+  font-style: normal;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.visor__boton {
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  background: var(--blanco);
+  color: var(--tinta);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.visor__boton:hover { background: var(--acento); color: var(--blanco); }
+
+.visor__boton--anterior { left: 1rem; top: 50%; }
+.visor__boton--siguiente { right: 1rem; top: 50%; }
+.visor__boton--cerrar { right: 1rem; top: 1rem; }
+
+
+/* ---------- Pie ---------- */
+
+.pie {
+  border-top: 1px solid var(--linea);
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+.pie p { margin: 0.25rem 0; }
+
+
+/* ---------- Móvil ---------- */
+
+@media (max-width: 40rem) {
+  body { font-size: 1.05rem; }
+
+  .cabecera { padding-top: 1.25rem; }
+  .menu ul { gap: 0 1rem; }
+
+  .datos { grid-template-columns: 1fr; }
+
+  .visor__boton--anterior,
+  .visor__boton--siguiente { top: auto; bottom: 1rem; }
+}
+
+/* Si el usuario prefiere menos movimiento, quitamos giros y transiciones */
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta,
+  .tarjeta:nth-child(even),
+  .tarjeta:hover { transform: none; transition: none; }
+  .cabecera { transition: none; }
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cuaderno de viaje de una familia por los cuatro parques de Walt Disney World.">
+  <title>Cuatro parques y una familia</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- los scripts se ejecutan cuando el HTML ya está cargado -->
+  <script src="posts.js" defer></script>
+  <script src="index.js" defer></script>
+</head>
+
+<!-- data-park cambia según la entrada que se está leyendo (lo hace index.js) -->
+
+<body data-park="inicio">
+
+  <header class="cabecera">
+    <div class="cabecera__fila">
+      <a class="marca" href="#/">Cuatro parques<br>y una familia</a>
+      <p class="reloj">Ahora en Orlando <time id="reloj">--:--:--</time></p>
+    </div>
+    <p class="lema">Cuaderno de viaje por Walt Disney World</p>
+
+    <nav class="menu" aria-label="Menú principal">
+      <ul>
+        <li><a href="#/">Inicio</a></li>
+        <li><a href="#/magic-kingdom">Magic Kingdom</a></li>
+        <li><a href="#/epcot">Epcot</a></li>
+        <li><a href="#/animal-kingdom">Animal Kingdom</a></li>
+        <li><a href="#/hollywood-studios">Hollywood Studios</a></li>
+        <li><a href="#/como-esta-hecho">Cómo está hecho</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Aquí index.js pinta la página que corresponda a la URL -->
+  <main id="contenido">
+    <noscript>Este blog necesita JavaScript activado para mostrar las entradas.</noscript>
+  </main>
+
+  <footer class="pie">
+    <p>Un blog personal hecho con HTML, CSS y JavaScript, sin frameworks. Todas las fotos son nuestras.</p>
+    <p>Blog de aficionados sin relación con The Walt Disney Company.</p>
+    <p>Actividad 1 · Aplicaciones en Red · UNIR</p>
+  </footer>
+
+  <!-- Visor de fotos (lightbox). <dialog> es un elemento nativo de HTML -->
+  <dialog id="visor" class="visor" aria-label="Visor de fotos">
+    <figure>
+      <img id="visor-img" src="" alt="">
+      <figcaption>
+        <span id="visor-pie"></span>
+        <span id="visor-contador" class="visor__contador"></span>
+      </figcaption>
+    </figure>
+    <button class="visor__boton visor__boton--anterior" data-accion="anterior"
+      aria-label="Foto anterior">&larr;</button>
+    <button class="visor__boton visor__boton--siguiente" data-accion="siguiente"
+      aria-label="Foto siguiente">&rarr;</button>
+    <button class="visor__boton visor__boton--cerrar" data-accion="cerrar" aria-label="Cerrar">&times;</button>
+  </dialog>
+
+  <!--
+    Plantilla de la página "Cómo está hecho".
+    El contenido de un <template> no se muestra: JS lo copia cuando hace falta.
+  -->
+  <template id="plantilla-como">
+    <article class="entrada documento">
+      <header class="entrada__cabecera">
+        <p class="sello">Detrás del blog</p>
+        <h1>Cómo está hecho este blog</h1>
+        <p class="entrada__entradilla">Sin frameworks ni generadores: un archivo HTML, una hoja de estilos y dos
+          archivos de JavaScript.</p>
+      </header>
+
+      <section>
+        <h2>La idea</h2>
+        <p>Las plataformas como Jekyll o Gatsby generan las páginas de un blog a partir de unos datos. Aquí hago lo
+          mismo, pero a mano y en el navegador: las entradas están escritas como datos en <code>posts.js</code>, e
+          <code>index.js</code> las convierte en HTML según la dirección que se esté visitando.</p>
+        <pre><code>index.html   estructura fija: cabecera, menú, &lt;main&gt; vacío y pie
+styles.css   todo el diseño
+posts.js     las entradas (textos, fotos, imprescindibles…)
+index.js     el "motor": rutas, pintado, galería, lista y reloj
+img/         las fotos</code></pre>
+      </section>
+
+      <section>
+        <h2>HTML: estructura con significado</h2>
+        <p>Uso etiquetas semánticas para que cada parte diga lo que es: <code>&lt;header&gt;</code>,
+          <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>,
+          <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code> y <code>&lt;footer&gt;</code>. Las fotos van en
+          <code>&lt;figure&gt;</code> con su <code>&lt;figcaption&gt;</code>, las fechas en <code>&lt;time&gt;</code> y
+          los datos de cada parque en una lista de definiciones <code>&lt;dl&gt;</code>. El visor de fotos es un
+          <code>&lt;dialog&gt;</code> y esta misma página está guardada en un <code>&lt;template&gt;</code>.</p>
+      </section>
+
+      <section>
+        <h2>CSS: un color para cada parque</h2>
+        <p>Los colores están en variables CSS. Cada parque redefine la variable <code>--acento</code> y todo lo que la
+          usa cambia a la vez:</p>
+        <pre><code>:root                 { --acento: #7a5c3a; }
+[data-park="mk"]      { --acento: #2e3f8f; }
+[data-park="hs"]      { --acento: #a12a22; }
+
+.sello { border-color: var(--acento); }</code></pre>
+        <p>Al abrir una entrada, JavaScript cambia el atributo <code>data-park</code> del <code>&lt;body&gt;</code> y la
+          web entera adopta el color de ese parque. La cabecera, además, lleva un dibujo distinto para cada parque hecho
+          solo con degradados CSS, sin imágenes: puntitos dorados como fuegos artificiales en Magic Kingdom, una rejilla
+          futurista en Epcot, rayas de sabana en Animal Kingdom y un telón de cine en Hollywood Studios. En la portada,
+          cada tarjeta lleva su propio <code>data-park</code>, así que cada una tiene su color. Además: Grid para las
+          tarjetas y la galería, Flexbox para el menú, contadores CSS para numerar las secciones y <em>media
+            queries</em> para el móvil.</p>
+      </section>
+
+      <section>
+        <h2>JavaScript: el DOM en acción</h2>
+        <ul>
+          <li><strong>Router.</strong> Cada página tiene su dirección (<code>#/epcot</code>). Al cambiar, se dispara el
+            evento <code>hashchange</code> y se pinta el contenido nuevo en el <code>&lt;main&gt;</code>. Los botones
+            atrás y adelante del navegador funcionan solos.</li>
+          <li><strong>Pintado.</strong> Con plantillas de texto (<code>`...`</code>) y <code>innerHTML</code> se
+            construye el HTML de cada entrada a partir de sus datos.</li>
+          <li><strong>Galería.</strong> Un único <code>addEventListener</code> en el <code>&lt;main&gt;</code> detecta
+            los clics en cualquier foto (delegación de eventos). Las flechas del teclado pasan de foto y <kbd>Esc</kbd>
+            cierra el visor.</li>
+          <li><strong>Imprescindibles.</strong> Lo que se marca se guarda en <code>localStorage</code>, así sigue
+            marcado al volver otro día.</li>
+          <li><strong>Reloj.</strong> <code>Intl.DateTimeFormat</code> con la zona horaria <code>America/New_York</code>
+            muestra la hora de Orlando y <code>setInterval</code> la actualiza cada segundo.</li>
+        </ul>
+        <pre><code>window.addEventListener('hashchange', mostrarPagina);
+
+function mostrarPagina() {
+  const ruta = location.hash.slice(2);   // "#/epcot" → "epcot"
+  const parque = PARQUES.find(p => p.id === ruta);
+  ...
+}</code></pre>
+      </section>
+
+      <nav class="entrada__pasos">
+        <a href="#/">&larr; Volver al inicio</a>
+      </nav>
+    </article>
+  </template>
+
+</body>
+
+</html>
