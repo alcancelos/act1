@@ -83,59 +83,82 @@
 
       <section>
         <h2>La idea</h2>
-        <p>Elegí construir un generador de sitios estáticos mínimo con HTML, CSS y JavaScript puros, sin frameworks, para entender qué hace un generador por dentro.
-           Las entradas están escritas como datos en <code>posts.js</code>, e
-          <code>index.js</code> las convierte en HTML según la dirección que se esté visitando.</p>
-        <pre><code>index.html   estructura fija: cabecera, menú, &lt;main&gt; vacío y pie
-styles.css   todo el diseño
-posts.js     las entradas (textos, fotos, imprescindibles…)
-index.js     el "motor": rutas, pintado, galería, lista y reloj
-img/         las fotos</code></pre>
+        <p><em>Cuatro parques y una familia</em> es un cuaderno de viaje sobre los cuatro parques de Walt Disney World:
+          Magic Kingdom, Epcot, Animal Kingdom y Hollywood Studios. Cada parque es una entrada con fotos y recuerdos de
+          mi propia familia.</p>
+        <p>Todas las entradas siguen la misma estructura: datos del parque, nuestra visita, galería de fotos, lista de
+          imprescindibles y un consejo para ir con niños.</p>
       </section>
 
       <section>
-        <h2>HTML:</h2>
-        <p>Uso etiquetas semánticas para que cada parte diga lo que es: <code>&lt;header&gt;</code>,
-          <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>,
-          <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code> y <code>&lt;footer&gt;</code>. Las fotos van en
-          <code>&lt;figure&gt;</code> con su <code>&lt;figcaption&gt;</code>, las fechas en <code>&lt;time&gt;</code> y
-          los datos de cada parque en una lista de definiciones <code>&lt;dl&gt;</code>. El visor de fotos es un
-          <code>&lt;dialog&gt;</code> y esta misma página está guardada en un <code>&lt;template&gt;</code>.</p>
-      </section>
+        <h2>Cómo está construido</h2>
+        <p>Elegí construir un generador de sitios estáticos mínimo con HTML, CSS y JavaScript puros, sin frameworks,
+          para entender qué hace un generador por dentro.</p>
+        <table class="tabla">
+          <thead>
+            <tr><th>Archivo</th><th>Función</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>index.html</code></td><td>Estructura fija con etiquetas semánticas (<code>header</code>,
+                <code>nav</code>, <code>main</code>, <code>article</code>, <code>figure</code>, <code>time</code>,
+                <code>dialog</code>, <code>template</code>)</td></tr>
+            <tr><td><code>styles.css</code></td><td>Diseño con variables CSS, Grid, Flexbox y <em>media queries</em> para
+                móvil</td></tr>
+            <tr><td><code>posts.js</code></td><td>Las entradas escritas como datos: un array de objetos</td></tr>
+            <tr><td><code>index.js</code></td><td>Lee los datos y construye el DOM de cada página</td></tr>
+          </tbody>
+        </table>
 
-      <section>
-        <h2>CSS: un color para cada parque</h2>
-        <p>Los colores están en variables CSS. Cada parque redefine la variable <code>--acento</code> y todo lo que la
-          usa cambia a la vez:</p>
-        <pre><code>:root                 { --acento: #7a5c3a; }
-[data-park="mk"]      { --acento: #2e3f8f; }
-[data-park="hs"]      { --acento: #a12a22; }
+        <ul>
+          <li><strong>Navegación:</strong> cada página tiene su dirección (<code>#/epcot</code>). Al cambiar, el evento
+            <code>hashchange</code> pinta el contenido nuevo, y los botones atrás y adelante del navegador funcionan.</li>
+          <li><strong>Color por parque:</strong> JavaScript cambia el atributo <code>data-park</code> del
+            <code>body</code> y las variables CSS tiñen toda la web. Cada cabecera lleva un dibujo hecho solo con
+            degradados CSS.</li>
+          <li><strong>DOM y eventos:</strong> galería con visor (<code>dialog</code>) que se maneja con el teclado,
+            lista de imprescindibles guardada en <code>localStorage</code> y reloj con la hora de Orlando
+            (<code>Intl.DateTimeFormat</code>).</li>
+        </ul>
+
+        <h3>CSS</h3>
+        <ul>
+          <li><strong>Nombres de clase con BEM:</strong> sigo la convención
+            <code>bloque__elemento--modificador</code>. Por ejemplo, <code>.tarjeta</code> es un bloque,
+            <code>.tarjeta__progreso</code> un elemento suyo y <code>.visor__boton--cerrar</code> una variante. Así se
+            ve a qué componente pertenece cada estilo, sin anidar selectores.</li>
+          <li><strong>Variables y herencia:</strong> los colores son variables (<code>--acento</code>,
+            <code>--detalle</code>). El selector de atributo <code>[data-park="mk"]</code> las redefine y, como las
+            variables se heredan, cambia de color todo lo que hay dentro. Funciona igual en el <code>body</code> (la
+            página entera) que en cada tarjeta de la portada.</li>
+          <li><strong>Selectores avanzados:</strong> <code>a[aria-current="page"]</code> resalta el menú activo,
+            <code>body:not([data-park="inicio"])</code> pinta la cabecera solo dentro de un parque y
+            <code>label:has(input:checked)</code> tacha los imprescindibles ya marcados.</li>
+          <li><strong>Maquetación:</strong> Grid con <code>repeat(auto-fill, minmax(…))</code> reparte las tarjetas y la
+            galería según el ancho de la pantalla, Flexbox alinea el menú y un contador CSS en <code>h2::before</code>
+            numera las secciones de cada entrada (01, 02, 03).</li>
+        </ul>
+        <pre><code>:root            { --acento: #7a5c3a; }
+[data-park="mk"] { --acento: #2e3f8f; }
+[data-park="hs"] { --acento: #a12a22; }
 
 .sello { border-color: var(--acento); }</code></pre>
-        <p>Al abrir una entrada, JavaScript cambia el atributo <code>data-park</code> del <code>&lt;body&gt;</code> y la
-          web entera adopta el color de ese parque. La cabecera, además, lleva un dibujo distinto para cada parque hecho
-          solo con degradados CSS, sin imágenes: puntitos dorados como fuegos artificiales en Magic Kingdom, una rejilla
-          futurista en Epcot, rayas de sabana en Animal Kingdom y un telón de cine en Hollywood Studios. En la portada,
-          cada tarjeta lleva su propio <code>data-park</code>, así que cada una tiene su color. Además: Grid para las
-          tarjetas y la galería, Flexbox para el menú, contadores CSS para numerar las secciones y <em>media
-            queries</em> para el móvil.</p>
-      </section>
 
-      <section>
-        <h2>JavaScript:</h2>
+        <h3>JavaScript y manejo del DOM</h3>
         <ul>
-          <li><strong>Router.</strong> Cada página tiene su dirección (<code>#/epcot</code>). Al cambiar, se dispara el
-            evento <code>hashchange</code> y se pinta el contenido nuevo en el <code>&lt;main&gt;</code>. Los botones
-            atrás y adelante del navegador funcionan solos.</li>
-          <li><strong>Pintado.</strong> Con plantillas de texto (<code>`...`</code>) y <code>innerHTML</code> se
-            construye el HTML de cada entrada a partir de sus datos.</li>
-          <li><strong>Galería.</strong> Un único <code>addEventListener</code> en el <code>&lt;main&gt;</code> detecta
-            los clics en cualquier foto (delegación de eventos). Las flechas del teclado pasan de foto y <kbd>Esc</kbd>
-            cierra el visor.</li>
-          <li><strong>Checkboxs.</strong> Lo que se marca se guarda en <code>localStorage</code>, así sigue
-            marcado al volver otro día.</li>
-          <li><strong>Reloj.</strong> <code>Intl.DateTimeFormat</code> con la zona horaria <code>America/New_York</code>
-            muestra la hora de Orlando y <code>setInterval</code> la actualiza cada segundo.</li>
+          <li><strong>Seleccionar elementos:</strong> <code>getElementById</code> y <code>querySelectorAll</code>
+            guardan al principio las referencias a los elementos que se usan.</li>
+          <li><strong>Crear contenido:</strong> cada página se construye recorriendo los datos con <code>map()</code>,
+            generando el HTML con plantillas de texto e insertándolo con <code>innerHTML</code>. Esta misma página se
+            copia desde un <code>&lt;template&gt;</code> con <code>cloneNode</code> y <code>replaceChildren</code>.</li>
+          <li><strong>Modificar elementos:</strong> <code>dataset.park</code> cambia el tema,
+            <code>setAttribute('aria-current', …)</code> marca el menú, <code>textContent</code> actualiza el reloj y el
+            contador de la lista, y <code>document.title</code> cambia el título de la pestaña.</li>
+          <li><strong>Eventos:</strong> <code>hashchange</code> mueve el router y <code>keydown</code> las flechas del
+            visor. Un único <code>click</code> en <code>&lt;main&gt;</code>, con <code>closest()</code>, atiende todas
+            las fotos: es delegación de eventos, necesaria porque el contenido se vuelve a pintar en cada página.</li>
+          <li><strong>Persistencia:</strong> <code>localStorage</code> guarda la lista de imprescindibles como texto
+            JSON (<code>JSON.stringify</code> / <code>JSON.parse</code>), dentro de un <code>try/catch</code> por si el
+            navegador no lo permite.</li>
         </ul>
         <pre><code>window.addEventListener('hashchange', mostrarPagina);
 
@@ -144,6 +167,46 @@ function mostrarPagina() {
   const parque = PARQUES.find(p => p.id === ruta);
   ...
 }</code></pre>
+      </section>
+
+      <section>
+        <h2>Proceso de desarrollo</h2>
+        <ol>
+          <li><strong>Planificación:</strong> elegí el tema, la estructura de archivos y las funcionalidades que quería
+            demostrar.</li>
+          <li><strong>Contenido:</strong> seleccioné entre 4 y 6 fotos por parque, se redimensionaron a 1600 px (unos
+            300 KB cada una) y aporté mis recuerdos de cada visita como base de los textos.</li>
+          <li><strong>Construcción:</strong> primero el HTML, después los estilos y al final la lógica en JavaScript.
+            Para añadir otra entrada al blog bastaría con agregar un objeto al array de <code>posts.js</code>.</li>
+          <li><strong>Pruebas:</strong> revisé todas las rutas, la galería, la lista de imprescindibles y la vista en
+            móvil. Tras ver el resultado decidí que el color de cada parque se notara más, y se rehizo la cabecera.</li>
+          <li><strong>Publicación:</strong> subí el proyecto a un repositorio público de GitHub y lo publiqué con GitHub
+            Pages.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Uso responsable de la IA</h2>
+        <p>He usado Claude Code (Anthropic) como asistente de programación y lo declaro de forma explícita. Lo traté como
+          un compañero al que dirijo, no como un sustituto de mi criterio.</p>
+        <ul>
+          <li><strong>Lo que aporté yo:</strong> el tema y el enfoque familiar y didáctico, la decisión de usar HTML, CSS
+            y JavaScript puros, las fotos, los recuerdos y anécdotas de cada parque, y los cambios de diseño tras revisar
+            el resultado.</li>
+          <li><strong>Lo que hizo la IA:</strong> propuso la idea del generador con JavaScript, que elegí porque me
+            permitía entender cómo funciona uno por dentro. También generó el código y redactó los textos a partir de
+            mis notas.</li>
+          <li><strong>Cómo me aseguré de entenderlo:</strong> no di nada por bueno sin comprenderlo. Revisé el código
+            función por función y pregunté lo que no entendía, por ejemplo, para qué sirven los enlaces a Google Fonts.
+            Hoy puedo explicar cómo el router responde al evento <code>hashchange</code>, por qué un solo
+            <code>addEventListener</code> en <code>&lt;main&gt;</code> atiende todas las fotos (delegación de eventos) y
+            cómo una única variable CSS cambia el color de cada parque.</li>
+          <li><strong>Revisión:</strong> probé en el navegador cada funcionalidad, y revisé y corregí los datos y textos
+            sobre nuestro viaje.</li>
+          <li><strong>Privacidad:</strong> al ser un repositorio público con fotos de mis hijos, se eliminaron los
+            metadatos EXIF (que pueden incluir la ubicación GPS) y los originales se guardaron fuera del repositorio. El
+            blog no incluye nombres de menores.</li>
+        </ul>
       </section>
 
       <nav class="entrada__pasos">

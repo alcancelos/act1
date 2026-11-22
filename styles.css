@@ -488,6 +488,39 @@ main {
 /* Página "Cómo está hecho" */
 .documento li { margin-bottom: 0.75rem; }
 
+.documento h3 {
+  font-family: var(--fuente-titulos);
+  font-size: 1.25rem;
+  margin: 2.5rem 0 0.5rem;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  border-bottom: 1px solid var(--linea);
+}
+
+.tabla th {
+  font-family: var(--fuente-etiquetas);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tinta-suave);
+  border-bottom: 1px dashed var(--tinta-suave);
+}
+
+.tabla td:first-child { white-space: nowrap; }
+
 
 /* ---------- Visor de fotos (<dialog>) ---------- */
 
