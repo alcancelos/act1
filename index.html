@@ -49,7 +49,6 @@
 
   <footer class="pie">
     <p>Un blog personal hecho con HTML, CSS y JavaScript, sin frameworks. Todas las fotos son nuestras.</p>
-    <p>Blog de aficionados sin relación con The Walt Disney Company.</p>
     <p>Actividad 1 · Aplicaciones en Red · UNIR</p>
   </footer>
 
@@ -84,8 +83,8 @@
 
       <section>
         <h2>La idea</h2>
-        <p>Las plataformas como Jekyll o Gatsby generan las páginas de un blog a partir de unos datos. Aquí hago lo
-          mismo, pero a mano y en el navegador: las entradas están escritas como datos en <code>posts.js</code>, e
+        <p>Elegí construir un generador de sitios estáticos mínimo con HTML, CSS y JavaScript puros, sin frameworks, para entender qué hace un generador por dentro.
+           Las entradas están escritas como datos en <code>posts.js</code>, e
           <code>index.js</code> las convierte en HTML según la dirección que se esté visitando.</p>
         <pre><code>index.html   estructura fija: cabecera, menú, &lt;main&gt; vacío y pie
 styles.css   todo el diseño
@@ -95,7 +94,7 @@ img/         las fotos</code></pre>
       </section>
 
       <section>
-        <h2>HTML: estructura con significado</h2>
+        <h2>HTML:</h2>
         <p>Uso etiquetas semánticas para que cada parte diga lo que es: <code>&lt;header&gt;</code>,
           <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>,
           <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code> y <code>&lt;footer&gt;</code>. Las fotos van en
@@ -123,7 +122,7 @@ img/         las fotos</code></pre>
       </section>
 
       <section>
-        <h2>JavaScript: el DOM en acción</h2>
+        <h2>JavaScript:</h2>
         <ul>
           <li><strong>Router.</strong> Cada página tiene su dirección (<code>#/epcot</code>). Al cambiar, se dispara el
             evento <code>hashchange</code> y se pinta el contenido nuevo en el <code>&lt;main&gt;</code>. Los botones
@@ -133,7 +132,7 @@ img/         las fotos</code></pre>
           <li><strong>Galería.</strong> Un único <code>addEventListener</code> en el <code>&lt;main&gt;</code> detecta
             los clics en cualquier foto (delegación de eventos). Las flechas del teclado pasan de foto y <kbd>Esc</kbd>
             cierra el visor.</li>
-          <li><strong>Imprescindibles.</strong> Lo que se marca se guarda en <code>localStorage</code>, así sigue
+          <li><strong>Checkboxs.</strong> Lo que se marca se guarda en <code>localStorage</code>, así sigue
             marcado al volver otro día.</li>
           <li><strong>Reloj.</strong> <code>Intl.DateTimeFormat</code> con la zona horaria <code>America/New_York</code>
             muestra la hora de Orlando y <code>setInterval</code> la actualiza cada segundo.</li>
